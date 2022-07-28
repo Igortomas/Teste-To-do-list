@@ -1,0 +1,45 @@
+.cor-fonte-padrao {
+  color: #9c1d1c;
+}
+
+.w3-theme {
+    color:#fff !important;
+    background: #9c1d1c !important;
+    border-radius: 5px;
+}
+
+.input-busca{
+    padding:8px;
+    border:none;
+    border-bottom:1px solid #ccc;
+    width:90%;
+    position: relative;
+    top: 10px;
+}
+
+.w3-theme-blue {
+  color:#fff !important;
+  background: #2196F3 !important;
+  border-radius: 5px;
+}
+
+.w3-theme-green {
+  color:#fff !important;
+  background: #4CAF50 !important;
+  border-radius: 5px;
+}
+
+.w3-theme-grey {
+  color:rgb(42, 41, 41) !important;
+  background: #edecec !important;
+  border-radius: 5px;
+}
+
+.title-todolist {
+  position: relative;
+  left: 30px;
+}
+
+.table-list {
+  width:90%;
+}

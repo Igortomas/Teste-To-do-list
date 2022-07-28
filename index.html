@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>Teste Todo List</title>
+
+    <link rel="stylesheet" href="static/css/w3.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/toastr.css">
+
+    <link rel="stylesheet" href="static/css-awesome/brands.css">
+    <link rel="stylesheet" href="static/css-awesome/fontawesome.css">
+    <link rel="stylesheet" href="static/css-awesome/regular.css">
+    <link rel="stylesheet" href="static/css-awesome/solid.css">
+    <link rel="stylesheet" href="static/css-awesome/svg-with-js.css">
+    <link rel="stylesheet" href="static/css-awesome/v4-shims.css">
+
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      tr:nth-child(even) {background-color: #f2f2f2;}
+    </style>
+
+  </head>
+  <body>
+    <script src="static/js/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+      $( document ).ready(function() {
+        CarregaGrind();
+      });
+      
+      //Carrega o grind com as tasks
+      function CarregaGrind() {
+        var url_pesquisa = "controller.php";
+        var acao = "CarregaGrind";
+
+        $.ajax({
+          type: 'POST',
+          url: url_pesquisa,
+          async: true,
+          cache: false,
+          data :{'acao' : acao
+                },
+          dataType : "json",
+          complete: function(d) {
+
+          },
+          success: function(jsonData) {
+            let tabela = ``; 
+            var tarefasCompletas = 0;
+            for(let item of jsonData){
+              tabela += `<tr>
+                  <td class="table-list">${item[1]}</td>
+                  <td>`;
+              if(item[2] == 0){
+                tabela += `<button class="w3-button w3-theme-green w3-margin-top" onclick="CompletaTask(${item[0]})"><i class="fa fa-refresh"></i></button>
+                    <button class="w3-button w3-theme w3-margin-top float-right" onclick="DeletaTask(${item[0]})"><i class="fas fa-window-close"></i></button>
+                  </td>
+                </tr>`;
+              }else{
+                tabela += `<button class="w3-button w3-theme-blue w3-margin-top" onclick="CompletaTask(${item[0]})"><i class="fa fa-check"></i></button>
+                    <button class="w3-button w3-theme w3-margin-top" onclick="DeletaTask(${item[0]})"><i class="fas fa-window-close"></i></button>
+                  </td>
+                </tr>`;
+              }
+              if(item[2] == 1){
+                tarefasCompletas++;
+              }
+            }
+
+            totalTarefas = jsonData.length;
+            tarefas = `<h5>`+tarefasCompletas+`/`+totalTarefas+` tarefas completas</h5>`;
+
+            $('#resposta').html(tabela);
+            $('#tarefas').html(tarefas);
+          }
+        });
+      }
+
+      //Adiciona tasks na tabela
+      function AdicionaTask(tasks) {
+        var tasks = document.getElementById('tasks').value;
+        var url_pesquisa = "controller.php";
+        var acao = "AdicionaTask";
+
+        $.ajax({
+          type: 'POST',
+          url: url_pesquisa,
+          async: true,
+          cache: false,
+          data :{'tasks': tasks,
+                 'acao' : acao
+                },
+          dataType : "json",
+          complete: function(d) {
+          },
+          success: function(jsonData) {
+            document.location.reload(true);
+          }
+        });
+      }
+
+      //Marca a task como completa
+      function CompletaTask(id) {
+        var url_pesquisa = "controller.php";
+        var acao = "CompletaTask";
+        $.ajax({
+          type: 'POST',
+          url: url_pesquisa,
+          async: true,
+          cache: false,
+          data :{'id': id, 
+                 'acao': acao
+                },
+          dataType : "json",
+          complete: function(d) {
+          },
+          success: function(jsonData) {
+            document.location.reload(true);
+          }
+        });
+      }
+
+      //Deleta a task
+      function DeletaTask(id) {
+        var url_pesquisa = "controller.php";
+        var acao = "DeletaTask";
+        $.ajax({
+          type: 'POST',
+          url: url_pesquisa,
+          async: true,
+          cache: false,
+          data :{'id': id, 
+                 'acao': acao
+                },
+          dataType : "json",
+          complete: function(d) {
+          },
+          success: function(jsonData) {
+            document.location.reload(true);
+          }
+        });
+      }
+
+    </script>
+
+    <div class="title-todolist">
+      <h1><b>Compras da manhã</b></h1>
+    </div>
+
+    <div class="title-todolist">
+      <a id="tarefas"></a>
+    </div>
+
+    <div>
+      <div id="lista_usuarios" class="w3-margin">
+        <input class="input-busca w3-border w3-margin-top" type="text" id="tasks" placeholder="Your task">
+        <a href="#" class="w3-button w3-theme-grey w3-margin-top" onclick="AdicionaTask()">Adicionar</a>
+        <table>
+          <thead>
+            <tr>
+              <th></td>
+              <th></td>
+            </tr>
+          </thead>
+          <tbody id="resposta"></tbody>
+        </table>
+
+      </div>
+    </div>
+  </body>
+</html>
